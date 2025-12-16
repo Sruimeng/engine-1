@@ -29,18 +29,38 @@ Galacean Engine 是一个高性能的 3D 引擎，采用现代化的 ECS（Entit
 ```
 /llmdoc/
 ├── index.md                 # 文档首页（当前页面）
+├── api/                      # 🔧 API参考文档 - 详细的接口说明
+│   ├── index.md                 # API索引和快速导航
+│   ├── engine-core.md           # 引擎核心API（Engine、Scene、Entity等）
+│   ├── engine-math.md           # 数学库API（Vector、Matrix、Quaternion等）
+│   └── engine-rhi-webgl.md      # WebGL渲染接口API
 ├── reference/               # 📋 参考文档 - 项目的"宪法"
 │   ├── coding-conventions.md    # ⭐ 编码规范（必读）
 │   ├── data-models.md          # 数据模型与ECS架构
 │   ├── tech-stack.md           # 技术栈详情
+│   ├── packages-overview.md    # 📦 包概览（推荐）
+│   ├── package-dependencies.md # 🔗 包依赖关系
 │   ├── git-workflow.md         # Git工作流规范
 │   ├── testing-standards.md    # 测试标准
 │   └── shared-utilities.md     # 共享工具库
 ├── architecture/             # 🏗️ 架构设计 - 核心系统设计
 │   ├── overview.md              # 架构总览
-│   └── system-overview.md      # 系统概览
+│   ├── system-overview.md      # 系统概览
+│   ├── rendering-pipeline.md   # 🎨 渲染管线详解
+│   ├── ecs-design.md          # 🧩 ECS架构设计
+│   ├── shader-system.md       # ⚡ 着色器系统架构
+│   ├── physics-integration.md # 🏐 物理系统集成
+│   ├── resource-management.md # 📦 资源管理系统
+│   └── platform-abstraction.md # 🌐 平台抽象层设计
 ├── guides/                   # 📖 开发指南 - 实用教程
 │   └── quick-start.md           # 快速入门
+├── examples/                 # 💡 示例和最佳实践
+│   ├── common-patterns.md        # 常见设计模式
+│   ├── performance-patterns.md   # 性能优化模式
+│   ├── troubleshooting.md        # 问题排查指南
+│   ├── migration-guide.md        # 版本迁移指南
+│   ├── recipes.md                # 实用代码片段
+│   └── anti-patterns.md          # 反模式和避坑指南
 └── agent/                    # 🤖 智能体策略 - AI辅助开发
 ```
 
@@ -64,19 +84,70 @@ Galacean Engine 是一个高性能的 3D 引擎，采用现代化的 ECS（Entit
 - **[数据模型与ECS架构](reference/data-models.md)** - ECS架构、核心组件和系统接口
 - **[技术栈](reference/tech-stack.md)** - 引擎使用的技术栈和依赖详情
 
+### 包架构
+- **[包概览](reference/packages-overview.md)** - 📦 **推荐！** 14个包的详细功能说明和选择指南
+- **[包依赖关系](reference/package-dependencies.md)** - 🔗 包之间的依赖关系和影响分析
+
 ### 工作流程
 - **[Git工作流](reference/git-workflow.md)** - 提交规范、分支策略
 - **[测试标准](reference/testing-standards.md)** - 单元测试、集成测试规范
 - **[共享工具库](reference/shared-utilities.md)** - 通用工具和辅助函数
 
+## 🔧 API参考文档 (API Reference)
+
+- **[API索引](api/index.md)** - 📋 所有模块的快速导航和概览
+- **[引擎核心API](api/engine-core.md)** - 🎮 Engine、Scene、Entity、Component等核心类
+- **[数学库API](api/engine-math.md)** - 📐 Vector、Matrix、Quaternion等数学类型
+- **[WebGL渲染API](api/engine-rhi-webgl.md)** - 🎨 WebGL设备、缓冲区、纹理等渲染接口
+
 ## 🏗️ 架构文档 (Architecture)
 
 - **[架构概览](architecture/overview.md)** - 整体架构设计和模块关系
 - **[系统概览](architecture/system-overview.md)** - 各子系统的详细说明
+- **[渲染管线详解](architecture/rendering-pipeline.md)** - 🎨 完整的渲染管线架构、数据流和优化策略
+- **[ECS架构设计](architecture/ecs-design.md)** - 🧩 Entity-Component-System的设计思想和实现细节
+- **[着色器系统架构](architecture/shader-system.md)** - ⚡ 着色器编译、缓存和跨平台支持
+- **[物理系统集成](architecture/physics-integration.md)** - 🏐 物理引擎集成、碰撞检测和优化策略
+- **[资源管理系统](architecture/resource-management.md)** - 📦 资源加载、缓存和内存管理详解
+- **[平台抽象层设计](architecture/platform-abstraction.md)** - 🌐 RHI设计和跨平台渲染支持
 
 ## 📖 开发指南 (Guides)
 
 - **[快速入门](guides/quick-start.md)** - 引擎的快速上手指南
+- **[场景管理指南](guides/scene-management.md)** - 🎬 场景创建、切换和管理
+- **[ECS组件系统](guides/component-system.md)** - 🧩 Entity-Component-System使用指南
+- **[材质系统指南](guides/material-system.md)** - 🎨 PBR材质、着色器和纹理管理
+- **[动画系统指南](guides/animation-system.md)** - 🎞️ 骨骼动画、变形动画和动画状态机
+- **[渲染基础指南](guides/rendering-basics.md)** - 📐 相机、光照、阴影和渲染优化
+- **[性能优化指南](guides/performance-optimization.md)** - ⚡ 帧率优化、内存管理和性能调优
+- **[资源加载管理](guides/asset-loading.md)** - 📦 异步加载、缓存和资源管理
+- **[UI开发指南](guides/ui-development.md)** - 🖱️ Canvas系统、UI组件和交互事件
+
+## 💡 示例和最佳实践 (Examples)
+
+### 设计模式和架构
+- **[常见设计模式](examples/common-patterns.md)** - 🎯 ECS架构、组件通信、资源管理等核心模式
+- **[反模式指南](examples/anti-patterns.md)** - ⚠️ 需要避免的常见错误和陷阱
+
+### 性能优化
+- **[性能优化模式](examples/performance-patterns.md)** - 🚀 渲染、内存、计算优化策略
+- **[实用代码片段](examples/recipes.md)** - 🍳 开箱即用的代码解决方案
+
+### 开发支持
+- **[问题排查指南](examples/troubleshooting.md)** - 🔧 常见问题的诊断和解决方案
+- **[版本迁移指南](examples/migration-guide.md)** - 🔄 跨版本升级指导
+
+### 🎯 快速导航
+
+| 开发需求 | 推荐文档 | 说明 |
+|---------|----------|------|
+| 🚀 快速开始 | [快速入门](guides/quick-start.md) | 5分钟上手引擎 |
+| 📋 API查询 | [API索引](api/index.md) | 完整的API参考 |
+| 🎮 场景开发 | [场景管理指南](guides/scene-management.md) | 场景创建和管理 |
+| 🧩 ECS系统 | [ECS组件系统](guides/component-system.md) | 组件化开发 |
+| 🎨 渲染开发 | [渲染管线详解](architecture/rendering-pipeline.md) | 深入渲染机制 |
+| ⚡ 性能优化 | [性能优化模式](examples/performance-patterns.md) | 性能调优技巧 |
+| 🔧 问题解决 | [问题排查指南](examples/troubleshooting.md) | 常见问题解决 |
 
 ## 🤖 智能体策略 (Agent)
 
@@ -91,10 +162,20 @@ Galacean Engine 是一个高性能的 3D 引擎，采用现代化的 ECS（Entit
 4. **[数据模型](reference/data-models.md)** - 理解ECS架构
 
 ### 深度开发路径
-1. **[架构概览](architecture/overview.md)** - 理解整体设计
-2. **[技术栈](reference/tech-stack.md)** - 熟悉技术细节
-3. **[测试标准](reference/testing-standards.md)** - 编写高质量测试
-4. **[Git工作流](reference/git-workflow.md)** - 规范协作流程
+1. **[包概览](reference/packages-overview.md)** - 了解引擎包结构
+2. **[架构概览](architecture/overview.md)** - 理解整体设计
+3. **[技术栈](reference/tech-stack.md)** - 熟悉技术细节
+4. **[包依赖关系](reference/package-dependencies.md)** - 理解包间关系
+5. **[测试标准](reference/testing-standards.md)** - 编写高质量测试
+6. **[Git工作流](reference/git-workflow.md)** - 规范协作流程
+
+### 专业开发路径
+1. **[API索引](api/index.md)** - 熟悉引擎API体系
+2. **[ECS组件系统](guides/component-system.md)** - 掌握组件化开发
+3. **[渲染管线详解](architecture/rendering-pipeline.md)** - 深入渲染机制
+4. **[性能优化指南](guides/performance-optimization.md)** - 优化应用性能
+5. **[常见设计模式](examples/common-patterns.md)** - 学习最佳实践
+6. **[问题排查指南](examples/troubleshooting.md)** - 解决实际问题
 
 ### 快速导航
 
@@ -102,10 +183,21 @@ Galacean Engine 是一个高性能的 3D 引擎，采用现代化的 ECS（Entit
 |------|----------|
 | 🚀 快速开始 | [快速入门](guides/quick-start.md) |
 | 📝 编码前必读 | [编码规范](reference/coding-conventions.md) |
+| 📦 了解包结构 | [包概览](reference/packages-overview.md) |
 | 🏗️ 了解架构 | [架构概览](architecture/overview.md) |
+| 🎨 渲染管线 | [渲染管线详解](architecture/rendering-pipeline.md) |
+| 🧩 ECS系统 | [ECS架构设计](architecture/ecs-design.md) |
+| ⚡ 着色器开发 | [着色器系统架构](architecture/shader-system.md) |
+| 🏐 物理引擎 | [物理系统集成](architecture/physics-integration.md) |
+| 📦 资源管理 | [资源管理系统](architecture/resource-management.md) |
+| 🌐 跨平台开发 | [平台抽象层设计](architecture/platform-abstraction.md) |
 | 🔧 深入开发 | [数据模型](reference/data-models.md) |
+| 🔗 包依赖分析 | [包依赖关系](reference/package-dependencies.md) |
 | 🤝 协作开发 | [Git工作流](reference/git-workflow.md) |
 | 🧪 编写测试 | [测试标准](reference/testing-standards.md) |
+| 💡 设计模式 | [常见设计模式](examples/common-patterns.md) |
+| 🚀 性能优化 | [性能优化模式](examples/performance-patterns.md) |
+| 🔧 问题排查 | [问题排查指南](examples/troubleshooting.md) |
 
 ## 💡 重要提醒
 
