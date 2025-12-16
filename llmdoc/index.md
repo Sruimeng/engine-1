@@ -10,8 +10,9 @@ Galacean Engine 是一个高性能的 3D 引擎，采用现代化的 ECS（Entit
 - 🎮 **完整的游戏开发框架** - 基于 ECS 的高度可扩展架构
 - 🚀 **高性能渲染** - 基于 WebGL/WebGPU 的渲染硬件抽象层（RHI）
 - ⚡ **物理模拟** - 集成的物理引擎支持
+- 🎯 **BVH碰撞检测** - 基于包围盒层次结构的高性能碰撞检测系统
 - 🎨 **灵活的UI系统** - 强大的 UI 渲染和交互框架
-- 🔧 **模块化设计** - 14 个独立包的 monorepo 架构
+- 🔧 **模块化设计** - 15 个独立包的 monorepo 架构
 - 📦 **TypeScript 原生支持** - 完整的类型定义和智能提示
 
 ### 技术栈概览
@@ -85,8 +86,9 @@ Galacean Engine 是一个高性能的 3D 引擎，采用现代化的 ECS（Entit
 - **[技术栈](reference/tech-stack.md)** - 引擎使用的技术栈和依赖详情
 
 ### 包架构
-- **[包概览](reference/packages-overview.md)** - 📦 **推荐！** 14个包的详细功能说明和选择指南
+- **[包概览](reference/packages-overview.md)** - 📦 **推荐！** 15个包的详细功能说明和选择指南
 - **[包依赖关系](reference/package-dependencies.md)** - 🔗 包之间的依赖关系和影响分析
+- **[BVH碰撞检测包](packages/engine-bvh.md)** - 🎯 **新包！** BVH空间加速和碰撞检测系统
 
 ### 工作流程
 - **[Git工作流](reference/git-workflow.md)** - 提交规范、分支策略
@@ -145,6 +147,7 @@ Galacean Engine 是一个高性能的 3D 引擎，采用现代化的 ECS（Entit
 | 📋 API查询 | [API索引](api/index.md) | 完整的API参考 |
 | 🎮 场景开发 | [场景管理指南](guides/scene-management.md) | 场景创建和管理 |
 | 🧩 ECS系统 | [ECS组件系统](guides/component-system.md) | 组件化开发 |
+| 🎯 碰撞检测 | [BVH碰撞检测包](packages/engine-bvh.md) | 高性能碰撞检测 |
 | 🎨 渲染开发 | [渲染管线详解](architecture/rendering-pipeline.md) | 深入渲染机制 |
 | ⚡ 性能优化 | [性能优化模式](examples/performance-patterns.md) | 性能调优技巧 |
 | 🔧 问题解决 | [问题排查指南](examples/troubleshooting.md) | 常见问题解决 |
