@@ -1,4 +1,12 @@
-# @galacean/engine-bvh BVH加速结构包
+---
+id: "packages-engine-bvh"
+type: "reference"
+title: "BVH 加速结构包"
+description: "@galacean/engine-bvh - 提供高效的 BVH 空间加速结构，用于碰撞检测、光线投射和空间查询"
+tags: ["bvh", "spatial-acceleration", "collision-detection", "raycasting", "performance"]
+context_dependency: ["coding-conventions", "architecture-rendering-pipeline"]
+related_ids: ["packages-engine-bvh", "architecture-physics-integration"]
+---
 
 ## 概述
 
@@ -689,6 +697,30 @@ class SceneOptimizer {
 - 每个节点约占用 64 字节
 - 100,000个对象约需要 6.4MB 内存
 - 对象池可减少 30-50% 的GC压力
+
+## ⚠️ 禁止事项
+
+### 关键约束
+- 🚫 **忘记归一化射线方向**：射线的构造函数会自动归一化方向，但直接创建可能会导致问题
+- 🚫 **不合理的 maxLeafSize 设置**：过大会降低查询性能，过小会导致树过深
+- 🚫 **频繁单点更新**：应使用批量插入或 refit 策略
+- 🚫 **忽略树深度限制**：无限增长会导致栈溢出和性能下降
+- 🚫 **不验证树状态**：定期使用 validate() 检查树的健康状态
+
+### 常见错误
+- ❌ 在循环中逐个插入大量对象（应该使用 BVHBuilder.build() 批量构建）
+- ❌ 更新对象后忘记调用 refit() 或 rebuild()
+- ❌ 射线查询未限制最大距离导致不必要的计算
+- ❌ 忽略构建策略对性能的影响（静态场景应使用 SAH）
+- ❌ 移除对象后未清理关联的数据映射
+
+### 最佳实践
+- ✅ 对于静态场景，使用 BVHBuildStrategy.SAH 构建
+- ✅ 对于动态场景，使用 BVHBuildStrategy.Median 并定期重建
+- ✅ 批量插入优于单个插入
+- ✅ 使用 refit() 更新多个对象后一次性更新树结构
+- ✅ 监控 BVHStats 并根据数据调整参数
+- ✅ 结合空间分区使用，进一步减少查询范围
 
 ## 总结
 
