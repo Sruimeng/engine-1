@@ -1,4 +1,12 @@
-# Galacean Engine 性能优化模式
+---
+id: "examples-performance-patterns"
+type: "reference"
+title: "Galacean Engine 性能优化模式"
+description: "详细介绍了 Galacean Engine 的渲染、内存、计算优化策略和最佳实践，帮助开发者构建高性能的3D应用"
+tags: ["examples", "performance", "optimization", "rendering", "memory", "profiling"]
+context_dependency: ["common-patterns"]
+related_ids: ["anti-patterns", "troubleshooting", "recipes"]
+---
 
 本文档详细介绍了 Galacean Engine 的性能优化策略和最佳实践，帮助开发者构建高性能的 3D 应用。
 
@@ -829,3 +837,25 @@ setInterval(() => {
 6. **监控分析**：实时性能分析，瓶颈识别
 
 通过合理应用这些优化技术，可以将应用性能提升数倍甚至数十倍。记住：**优化应该基于实际测量，而不是猜测**。使用性能分析器找出真正的瓶颈，然后有针对性地进行优化。
+
+## ⚠️ 禁止事项
+
+### 关键约束
+- 🚫 **忽视性能分析**: 在没有测量的情况下进行优化
+- 🚫 **过早优化**: 在代码结构不清晰时进行深度优化
+- 🚫 **破坏代码可读性**: 为微小的性能提升而牺牲代码质量
+- 🚫 **忽略内存限制**: 优化CPU时造成更大的内存压力
+
+### 常见错误
+- ❌ 在热点路径外进行不必要的优化
+- ❌ 忽略Draw Call数量，导致渲染瓶颈
+- ❌ 过度使用对象池，反而增加内存占用
+- ❌ 不合理的LOD设置，造成视觉质量下降
+- ❌ 忽略移动端和低端设备的性能差异
+
+### 最佳实践提醒
+- ✅ 先用性能分析器找出真正的瓶颈
+- ✅ 80/20原则：关注20%最耗时的代码
+- ✅ 优化前后进行基准测试对比
+- ✅ 考虑不同硬件配置的性能表现
+- ✅ 记录优化决策和结果，便于维护

@@ -1,3 +1,13 @@
+---
+id: "architecture-ecs-design"
+type: "architecture"
+title: "ECS架构设计详解"
+description: "Galacean Engine 采用Entity-Component-System（ECS）架构，通过数据和行为分离实现模块化"
+tags: ["ECS", "数据驱动", "组件化", "系统调度", "性能优化"]
+context_dependency: ["architecture-overview"]
+related_ids: ["architecture-system-overview", "architecture-resource-management"]
+---
+
 # ECS架构设计详解
 
 ## 概述
@@ -641,3 +651,24 @@ class MovementSystem extends AbstractSystem {
 ## 总结
 
 Galacean Engine的ECS架构通过数据和行为的分离，提供了高度模块化和可扩展的框架。设计平衡了开发效率和运行性能，为开发者提供了灵活的组件化开发体验。持续的优化和扩展确保了架构能够适应未来的需求变化。
+
+## ⚠️ 禁止事项
+
+### 关键约束 (🚫)
+- 🚫 **禁止**在Component中包含业务逻辑或复杂计算
+- 🚫 **禁止**在System中存储跨帧状态（必须存储在Component中）
+- 🚫 **禁止**直接访问其他Entity的Component（应使用Query系统）
+- 🚫 **禁止**在System的update方法中创建或销毁Entity
+
+### 常见错误 (❌)
+- ❌ **错误**: 在Component构造函数中依赖其他Component
+- ❌ **错误**: System直接修改其他System管理的组件数据
+- ❌ **错误**: 忽略ComponentQuery的include/exclude规则导致性能问题
+- ❌ **错误**: 在并行System中使用共享的可变状态
+
+### 最佳实践 (✅)
+- ✅ **推荐**: Component仅作为数据容器，纯净无逻辑
+- ✅ **推荐**: 在System中使用ComponentQuery进行高效查询
+- ✅ **推荐**: 遵循System依赖顺序，避免循环依赖
+- ✅ **推荐**: 利用SOA存储优化缓存命中率
+- ✅ **推荐**: 使用对象池管理Component生命周期

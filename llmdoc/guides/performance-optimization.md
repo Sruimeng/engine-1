@@ -1,4 +1,12 @@
-# 性能优化指南
+---
+id: "guide-performance-optimization"
+type: "guide"
+title: "性能优化指南"
+description: "详细分析渲染、内存、批处理和LOD系统的性能优化策略"
+tags: ["guide", "performance", "optimization", "rendering", "memory", "lod"]
+context_dependency: ["coding-conventions"]
+related_ids: ["guide-rendering-basics", "guide-material-system", "guide-asset-loading"]
+---
 
 性能优化是3D应用开发的关键环节，本指南详细介绍Galacean Engine的性能优化策略和最佳实践，帮助开发者创建流畅、高效的3D应用。
 
@@ -1386,3 +1394,24 @@ class AdaptiveQualityManager {
 ```
 
 通过遵循这些性能优化指南，你可以显著提升Galacean Engine应用的运行效率和用户体验。
+
+## ⚠️ 禁止事项
+
+### 关键约束
+- **帧率稳定性**: 必须确保主线程任务不超过每帧预算（16ms @60fps），防止帧率骤降
+- **内存占用峰值**: 单帧内存分配不能超过可用内存的10%，避免触发GC导致卡顿
+- **Draw Call数量**: 移动端必须控制在200个以下，PC端不超过500个
+- **顶点吞吐量**: 单帧渲染顶点数需限制在10万以内，避免GPU管线阻塞
+
+### 常见错误
+- **过度优化**: 在瓶颈不明显的部分进行优化，增加代码复杂度却无性能提升
+- **同步等待**: 使用 `while` 循环等待GPU操作完成，导致CPU空转
+- **内存泄露**: 缓存系统未设置上限，随时间推移内存占用持续增长
+- **精度损失**: 批处理时使用过低精度数据，导致视觉质量严重下降
+
+### 最佳实践
+- **增量优化**: 先用性能分析工具找到真实瓶颈，再针对性优化
+- **数据驱动**: 根据设备性能动态调整画质，而不是硬编码固定设置
+- **批处理优先**: 优先合并材质和网格，减少Draw Call比优化单个DrawCall更有效
+- **分帧处理**: 将耗时任务分摊到多帧，如流式加载和复杂计算
+- **提前准备**: 在场景加载时预热着色器、编译资源，避免运行时卡顿

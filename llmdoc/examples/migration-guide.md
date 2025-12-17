@@ -1,4 +1,12 @@
-# Galacean Engine 版本迁移指南
+---
+id: "examples-migration-guide"
+type: "reference"
+title: "Galacean Engine 版本迁移指南"
+description: "提供 Galacean Engine 不同版本之间的迁移指导，包括API变更、自动迁移工具和最佳实践，帮助开发者平滑升级项目"
+tags: ["examples", "migration", "version-control", "api-changes", "tools"]
+context_dependency: ["architecture-overview"]
+related_ids: ["common-patterns", "troubleshooting", "anti-patterns"]
+---
 
 本文档提供 Galacean Engine 不同版本之间的迁移指导，帮助开发者平滑升级项目。
 
@@ -544,3 +552,25 @@ describe("Migration from 1.5 to 1.6", () => {
 4. **文档更新**: 更新项目文档、迁移记录
 
 记住：**迁移后需要充分测试**，确保所有功能正常工作后再发布。建议在迁移过程中使用版本控制，保留每一步的变更记录。
+
+## ⚠️ 禁止事项
+
+### 关键约束
+- 🚫 **直接覆盖源代码**: 始终备份项目后再进行迁移操作
+- 🚫 **跳过测试**: 每个迁移步骤后都必须进行完整测试
+- 🚫 **一次性大范围修改**: 应该采用分阶段、逐步迁移的策略
+- 🚫 **忽视性能回归**: 迁移后必须进行性能基准测试
+
+### 常见错误
+- ❌ 没有备份就直接开始迁移
+- ❌ 忽略API破坏性变更，导致运行时错误
+- ❌ 一次性升级跨多个大版本
+- ❌ 不更新依赖库版本导致兼容性问题
+- ❌ 忽略自定义着色器和插件的兼容性
+
+### 最佳实践提醒
+- ✅ 迁移前创建完整的项目备份
+- ✅ 使用版本控制系统记录每一步变更
+- ✅ 先在小模块中测试迁移方案
+- ✅ 建立回滚计划，随时准备撤销变更
+- ✅ 保持文档更新，记录遇到的问题和解决方案

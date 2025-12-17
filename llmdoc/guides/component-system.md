@@ -1,4 +1,12 @@
-# ECS组件系统使用指南
+---
+id: "guide-component-system"
+type: "guide"
+title: "ECS组件系统使用指南"
+description: "详细介绍ECS架构、组件管理、实体操作和自定义组件开发"
+tags: ["guide", "ecs", "component", "entity", "system"]
+context_dependency: ["coding-conventions"]
+related_ids: ["guide-scene-management", "guide-quick-start"]
+---
 
 Galacean Engine采用Entity Component System (ECS)架构，提供灵活、高效的组件管理系统。本指南详细介绍如何使用ECS组件系统构建3D应用。
 
@@ -937,3 +945,24 @@ class ResourceAwareComponent extends Script {
 ```
 
 通过遵循这些指南，你可以充分利用Galacean Engine的ECS组件系统，构建可维护、高性能的3D应用。
+
+## ⚠️ 禁止事项
+
+### 关键约束
+- **组件所有权**: 组件必须由实体唯一所有，不可在多个实体间共享同一个组件实例
+- **生命周期顺序**: 组件的 `onAwake` 在实体创建时调用，`onStart` 在下一帧调用，不可依赖执行时序
+- **类型安全**: 自定义组件必须继承 `Component` 或 `Script` 基类，不可使用普通类替代
+- **依赖注入**: 组件间的依赖必须通过实体查找或事件系统，不可直接持有其他组件的强引用
+
+### 常见错误
+- **循环依赖**: 组件A依赖组件B，同时组件B依赖组件A，导致初始化死锁
+- **空指针异常**: 在 `onAwake` 中访问可能未初始化的组件，应使用 `getComponent` 配合空值检查
+- **重复添加**: 尝试向同一实体添加相同类型的组件，应先检查 `getComponent` 结果
+- **内存泄漏**: 组件中注册的事件监听器在销毁时未移除，导致回调异常
+
+### 最佳实践
+- **组件单一职责**: 每个组件只负责一个功能，避免创建"万能组件"
+- **依赖最小化**: 组件间尽量减少直接依赖，使用事件系统进行通信
+- **状态机模式**: 复杂的行为逻辑使用状态机组件，避免在 `onUpdate` 中写大量 `if-else`
+- **缓存复用**: 在 `onAwake` 中缓存常用组件引用，避免每帧 `getComponent` 查找
+- **条件编译**: 使用 `@if` 装饰器或环境变量控制调试代码，减少发布包体积

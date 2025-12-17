@@ -1,4 +1,12 @@
-# 渲染管线架构详解
+---
+id: "rendering-pipeline"
+type: "architecture"
+title: "渲染管线架构详解"
+description: "Galacean Engine 可编程渲染管线设计，支持前向/延迟渲染的多通道系统"
+tags: ["rendering", "pipeline", "rhi", "performance", "batching", "optimization"]
+context_dependency: ["platform-abstraction", "shader-system"]
+related_ids: ["ecs-design", "material-system", "resource-management"]
+---
 
 ## 概述
 
@@ -405,6 +413,29 @@ interface ISortingAlgorithm {
 - 智能LOD选择
 - 预测性资源加载
 - 自适应质量调整
+
+## ⚠️ 禁止事项
+
+### 关键约束
+- 🚫 **渲染状态冗余设置**: 必须使用 StateCache 避免重复设置
+- 🚫 **单对象渲染**: 必须优先使用批量渲染 (BatcherManager)
+- 🚫 **忽略渲染队列**: 必须遵循 RenderQueueType 排序规则
+- 🚫 **同步渲染阻塞**: 优先使用异步/延迟渲染命令
+- 🚫 **重复编译着色器**: 必须预编译和缓存着色器变体
+
+### 常见错误
+- ❌ 在渲染循环中创建临时对象
+- ❌ 忽略视锥体剔除和遮挡剔除
+- ❌ 透明对象不按深度排序
+- ❌ 材质切换频繁导致状态抖动
+- ❌ 未使用实例化渲染大量相同对象
+
+### 最佳实践
+- ✅ 使用对象池管理 RenderElement
+- ✅ 预合并静态网格几何体
+- ✅ 利用材质变体预编译
+- ✅ 实现 GPU Driven Rendering（如果支持）
+- ✅ 缓存渲染状态和计算结果
 
 ## 总结
 

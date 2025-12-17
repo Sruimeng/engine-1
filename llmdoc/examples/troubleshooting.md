@@ -1,4 +1,12 @@
-# Galacean Engine 问题排查指南
+---
+id: "examples-troubleshooting"
+type: "reference"
+title: "Galacean Engine 问题排查指南"
+description: "收集了开发过程中的常见问题、错误和解决方案，帮助开发者快速定位和解决渲染、性能、资源、物理和音频等问题"
+tags: ["examples", "troubleshooting", "debugging", "diagnostics", "errors", "solutions"]
+context_dependency: ["architecture-overview", "performance-patterns"]
+related_ids: ["anti-patterns", "performance-patterns", "migration-guide"]
+---
 
 本文档收集了 Galacean Engine 开发过程中的常见问题、错误和解决方案，帮助开发者快速定位和解决问题。
 
@@ -743,3 +751,25 @@ Logger.error("Asset", "Failed to load texture", texturePath);
 5. **错误处理**: 实现健壮的错误恢复机制
 
 记住：**可复现的问题才能被修复**。详细记录问题出现的步骤、环境和数据，这是解决问题的第一步。
+
+## ⚠️ 禁止事项
+
+### 关键约束
+- 🚫 **凭猜测调试**: 始终基于日志和数据进行问题定位
+- 🚫 **忽略环境因素**: 检查运行环境、配置和依赖版本
+- 🚫 **单一排查路径**: 同时从多个角度分析问题
+- 🚫 **跳过最小复现**: 不要直接修改大量代码，先构造最小复现案例
+
+### 常见错误
+- ❌ 不记录复现步骤，导致问题无法重现
+- ❌ 只在生产环境调试，没有开发环境验证
+- ❌ 忽略控制台警告和错误信息
+- ❌ 同时修改多处代码，导致无法定位真正原因
+- ❌ 不检查第三方库和依赖的版本兼容性
+
+### 最佳实践提醒
+- ✅ 建立系统性的调试流程和检查清单
+- ✅ 使用调试工具和日志系统收集详细信息
+- ✅ 构造最小可复现案例验证问题假设
+- ✅ 记录所有发现的问题根因和解决方案
+- ✅ 建立预防机制，避免类似问题重复发生

@@ -1,4 +1,12 @@
-# Galacean Engine 常见设计模式
+---
+id: "examples-common-patterns"
+type: "reference"
+title: "Galacean Engine 常见设计模式示例"
+description: "ECS架构、组件通信、资源管理、状态机等核心模式的代码示例和最佳实践"
+tags: ["examples", "patterns", "ecs", "best-practices", "architecture"]
+context_dependency: ["coding-conventions"]
+related_ids: ["anti-patterns", "performance-patterns", "recipes"]
+---
 
 本文档总结了 Galacean Engine 开发中的常见设计模式和最佳实践，帮助开发者编写更优雅、高效的代码。
 
@@ -537,3 +545,25 @@ const assets = await Promise.all(loadPromises);
 6. **异步操作**：合理控制并发，避免资源竞争
 
 遵循这些模式可以编写出更清晰、高效、可维护的代码。
+
+## ⚠️ 禁止事项
+
+### 关键约束
+- 🚫 **违反ECS原则**: 不应在Entity类中直接添加业务逻辑
+- 🚫 **过度继承**: 避免深层继承链，优先使用组合
+- 🚫 **资源泄漏**: 所有异步操作和资源加载必须有错误处理
+- 🚫 **硬编码依赖**: 组件间应通过事件通信，避免直接引用
+
+### 常见错误
+- ❌ 在Entity类中添加业务方法而非使用Component
+- ❌ 组件密耦合，直接访问其他组件的具体实现
+- ❌ 事件监听器不清理，场景切换时造成内存泄漏
+- ❌ 阻塞式资源加载导致UI卡顿
+- ❌ 忽略并发控制，导致资源竞争和状态不一致
+
+### 最佳实践提醒
+- ✅ 严格遵守ECS架构，Entity只负责组件管理
+- ✅ 使用事件系统进行组件间通信
+- ✅ 异步操作使用Promise，正确处理错误和超时
+- ✅ 对象池管理频繁创建销毁的对象
+- ✅ 合理使用缓存，避免重复计算

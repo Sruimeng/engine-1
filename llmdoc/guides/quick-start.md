@@ -1,3 +1,13 @@
+---
+id: "guide-quick-start"
+type: "guide"
+title: "Galacean Engine 快速入门"
+description: "包含安装指南、基础示例、常用功能和调试技巧的快速入门教程"
+tags: ["guide", "quick-start", "installation", "tutorial"]
+context_dependency: ["coding-conventions"]
+related_ids: ["guide-component-system", "guide-scene-management"]
+---
+
 # Galacean Engine 快速入门
 
 ## 安装
@@ -393,3 +403,24 @@ material.setFloat("u_time", 0);
 5. **社区支持**: 加入开发者社区获取帮助和分享经验
 
 选择一个感兴趣的指南开始深入学习吧！
+
+## ⚠️ 禁止事项
+
+### 关键约束
+- **版本兼容性**: 必须严格匹配引擎版本与类型声明版本，版本不匹配会导致编译错误
+- **CDN安全**: 使用CDN时必须指定具体版本号，不可使用 `latest` 或 `@latest` 标签
+- **异步初始化**: 引擎创建必须使用 `await` 确保初始化完成，不可同步使用未就绪的引擎
+- **Canvas生命周期**: Canvas元素必须在引擎销毁前从DOM移除，避免内存泄漏
+
+### 常见错误
+- **未处理异步**: 忽略 `load` 返回的Promise，导致资源加载失败无提示
+- **引擎重复创建**: 多次调用 `WebGLEngine.create` 而非复用现有引擎实例
+- **内存泄露**: 未调用 `engine.destroy()` 清理资源，尤其在单页应用中场景切换时
+- **浏览器兼容**: 未检测WebGL支持，导致旧浏览器白屏无提示
+
+### 最佳实践
+- **错误边界**: 使用 `try-catch` 包裹引擎创建和资源加载，提供用户友好的错误提示
+- **性能监控**: 在开发阶段启用 `enableDebug: true`，实时监控性能指标
+- **分步加载**: 使用分步加载策略，先显示基础场景再异步加载复杂模型
+- **状态管理**: 使用状态机管理加载状态，避免用户交互时引擎未就绪
+- **资源预热**: 游戏开始前预热核心着色器和纹理，避免首次使用时的卡顿

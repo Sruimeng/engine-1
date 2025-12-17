@@ -1,4 +1,12 @@
-# UI开发指南
+---
+id: "guide-ui-development"
+type: "guide"
+title: "UI开发指南"
+description: "详细介绍Canvas基础、UI组件、布局系统和事件处理机制"
+tags: ["guide", "ui", "canvas", "layout", "event-system", "ui-animation"]
+context_dependency: ["coding-conventions"]
+related_ids: ["guide-scene-management", "guide-rendering-basics"]
+---
 
 Galacean Engine提供了强大的UI系统，支持2D/3D混合UI、动态布局、动画效果等功能。本指南详细介绍如何使用UI系统创建用户界面。
 
@@ -1505,3 +1513,24 @@ class ResponsiveUISystem {
 ```
 
 通过遵循这些UI开发指南，你可以创建出响应迅速、视觉精美、易于维护的用户界面。
+
+## ⚠️ 禁止事项
+
+### 关键约束
+- **坐标空间**: UI元素必须使用特定的坐标空间，不可与3D世界坐标混淆
+- **锚点规则**: RectTransform锚点必须在[0,1]范围内，超出范围会导致布局异常
+- **渲染层级**: UI渲染层级必须正确设置，避免UI元素被3D物体遮挡或反之
+- **事件穿透**: UI事件处理必须明确是否阻止事件向下传递，避免误触3D物体
+
+### 常见错误
+- **Canvas重排**: 频繁修改UI元素属性导致Canvas重建，影响性能
+- **事件冒泡**: 未正确处理事件冒泡，导致父元素和子元素同时响应同一事件
+- **分辨率适配**: 未处理不同设备的宽高比，导致UI元素挤压或拉伸
+- **字体渲染**: 未预加载字体或字体文件过大，导致首次显示延迟
+
+### 最佳实践
+- **UI分层**: 使用多个Canvas分层（背景、主UI、弹窗、提示），独立控制渲染状态
+- **动态布局**: 使用自动布局组件代替硬编码位置，提高适配性
+- **对象池复用**: UI频繁创建销毁时使用对象池，减少内存分配和GC压力
+- **图片压缩**: UI纹理使用压缩格式（如ETC2），减少内存占用和加载时间
+- **动画优化**: 使用Transform动画而非属性动画，触发Canvas重建次数最少

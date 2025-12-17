@@ -1,4 +1,12 @@
-# Galacean Engine 反模式和需要避免的做法
+---
+id: "examples-anti-patterns"
+type: "reference"
+title: "Galacean Engine 反模式和需要避免的做法"
+description: "列出 Galacean Engine 开发中的常见反模式和错误实践，帮助开发者避免这些问题，编写更高质量的代码"
+tags: ["examples", "anti-patterns", "best-practices", "architecture", "performance", "memory"]
+context_dependency: ["coding-conventions"]
+related_ids: ["examples-common-patterns", "examples-performance-patterns", "examples-troubleshooting"]
+---
 
 本文档列出了 Galacean Engine 开发中的常见反模式和错误实践，帮助开发者避免这些问题，编写更高质量的代码。
 
@@ -799,3 +807,25 @@ class ProperErrorHandling {
 5. **改善用户体验**: 更流畅的运行效果
 
 记住：**预防胜于治疗**。在编码阶段就避免这些反模式，比后期修复要容易得多。定期进行代码审查，使用性能分析工具，持续优化代码质量。
+
+## ⚠️ 禁止事项
+
+### 关键约束
+- 🚫 **忽略错误处理**: 确保所有异常情况都有对应的处理逻辑
+- 🚫 **缺乏资源管理**: 必须正确管理内存和资源，避免泄漏
+- 🚫 **过度优化**: 先测量再优化，避免过早优化
+- 🚫 **违反ECS原则**: 遵循单一职责，避免过度耦合
+
+### 常见错误
+- ❌ 在 `onUpdate` 中频繁创建对象导致GC压力
+- ❌ 事件监听器未正确移除造成内存泄漏
+- ❌ 不必要的物理组件导致性能浪费
+- ❌ 深层继承而非组件组合
+- ❌ 忽略渲染队列排序和状态切换优化
+
+### 最佳实践提醒
+- ✅ 始终在组件销毁时清理资源和事件监听器
+- ✅ 使用对象池管理频繁创建销毁的对象
+- ✅ 按材质排序渲染队列，最小化Draw Call
+- ✅ 选择合适的碰撞体形状和物理参数
+- ✅ 使用缓存和延迟计算优化性能

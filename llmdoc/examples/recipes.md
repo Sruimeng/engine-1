@@ -1,4 +1,12 @@
-# Galacean Engine 实用代码片段集合
+---
+id: "examples-recipes"
+type: "reference"
+title: "Galacean Engine 实用代码片段集合"
+description: "收集了 Galacean Engine 开发中的实用代码片段和解决方案，包括场景管理、动画、UI、输入处理和数学工具等"
+tags: ["examples", "code-snippets", "recipes", "tools", "utilities"]
+context_dependency: ["common-patterns", "coding-conventions"]
+related_ids: ["common-patterns", "performance-patterns", "troubleshooting"]
+---
 
 本文档收集了 Galacean Engine 开发中的实用代码片段和解决方案，可以直接在项目中使用。
 
@@ -1071,3 +1079,25 @@ class Tween {
 5. **工具类**: 数学工具、插值、缓动
 
 将这些代码集成到项目中可以大大提高开发效率。记得根据具体需求调整参数和实现细节。
+
+## ⚠️ 禁止事项
+
+### 关键约束
+- 🚫 **直接复制粘贴**: 理解代码逻辑后再集成到项目中
+- 🚫 **忽略依赖关系**: 确保所需的基础类和库已正确引入
+- 🚫 **过度使用**: 不要为了简单功能引入复杂的代码片段
+- 🚫 **修改核心代码**: 对示例代码的修改应在项目代码中进行，不要修改原文件
+
+### 常见错误
+- ❌ 未调整参数直接使用，导致不符合项目需求
+- ❌ 忽略错误处理和边界条件
+- ❌ 集成后不测试，导致隐藏bug
+- ❌ 重复造轮子，已有类似功能仍添加新代码
+- ❌ 代码风格与项目整体不一致
+
+### 最佳实践提醒
+- ✅ 先理解代码原理和适用场景
+- ✅ 根据项目需求调整参数和实现细节
+- ✅ 添加必要的错误处理和参数验证
+- ✅ 保持代码风格与项目整体一致
+- ✅ 编写测试用例验证集成后的正确性

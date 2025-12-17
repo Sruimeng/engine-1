@@ -1,3 +1,13 @@
+---
+id: "architecture-system-overview"
+type: "architecture"
+title: "系统架构概览"
+description: "Galacean Engine 采用 Monorepo 架构，使用 pnpm workspace 管理多个相关包，遵循分层模块化设计"
+tags: ["Monorepo", "模块化", "包管理", "依赖管理", "开发工作流"]
+context_dependency: []
+related_ids: ["architecture-overview", "architecture-ecs-design"]
+---
+
 # 系统架构概览
 
 ## 项目架构
@@ -253,3 +263,24 @@ npm run coverage
 - **Workspace**: pnpm workspace 管理多包依赖
 - **版本管理**: 统一版本发布，使用 bumpp 工具
 - **依赖共享**: workspace 内包使用 workspace:* 协议
+
+## ⚠️ 禁止事项
+
+### 关键约束 (🚫)
+- 🚫 **禁止**在核心包中引入可选依赖（应设为peerDependency）
+- 🚫 **禁止**跨层级直接引用实现（只能通过接口层）
+- 🚫 **禁止**在包之间创建循环依赖
+- 🚫 **禁止**在非必要情况下打破包的边界
+
+### 常见错误 (❌)
+- ❌ **错误**: 忽略workspace协议导致版本不一致
+- ❌ **错误**: 在monorepo中使用相对路径引用其他包
+- ❌ **错误**: 忘记更新类型定义导致编译错误
+- ❌ **错误**: 在集成层包中直接实现具体功能逻辑
+
+### 最佳实践 (✅)
+- ✅ **推荐**: 严格遵循分层依赖关系
+- ✅ **推荐**: 使用接口层解耦模块间依赖
+- ✅ **推荐**: 统一版本管理策略
+- ✅ **推荐**: 完善的构建和测试工作流
+- ✅ **推荐**: 清晰的包文档和API说明

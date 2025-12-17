@@ -1,3 +1,13 @@
+---
+id: "architecture-overview"
+type: "architecture"
+title: "Galacean Engine 架构概览"
+description: "Galacean Engine 是一个模块化的 3D 引擎，采用分层架构设计"
+tags: ["架构", "ECS", "渲染管线", "模块化", "分层设计"]
+context_dependency: []
+related_ids: ["architecture-system-overview", "architecture-ecs-design", "architecture-rendering-pipeline"]
+---
+
 # Galacean Engine 架构概览
 
 ## 整体架构
@@ -166,3 +176,22 @@ onAwake() → onEnable() → onStart() → onUpdate() → onLateUpdate()
 - **Node.js (离屏渲染)**
 - **Electron (桌面应用)**
 - **WebGL到WebGL2的渐进增强**
+
+## ⚠️ 禁止事项
+
+### 关键约束 (🚫)
+- 🚫 **禁止**在引擎核心层直接调用平台特定API
+- 🚫 **禁止**在ECS系统间共享可变状态
+- 🚫 **禁止**在渲染管线中硬编码平台相关代码
+
+### 常见错误 (❌)
+- ❌ **错误**: 在Component中包含复杂业务逻辑
+- ❌ **错误**: 忽略资源引用计数导致内存泄漏
+- ❌ **错误**: 在渲染循环中进行同步I/O操作
+- ❌ **错误**: 直接修改其他系统的组件数据
+
+### 最佳实践 (✅)
+- ✅ **推荐**: 使用数据驱动的ECS设计模式
+- ✅ **推荐**: 利用脏标记优化性能
+- ✅ **推荐**: 通过抽象层实现跨平台兼容
+- ✅ **推荐**: 批量处理系统更新减少开销
