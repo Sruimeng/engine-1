@@ -15,7 +15,8 @@ export function unionBounds(a: BoundingBox, b: BoundingBox): BoundingBox {
  * 计算包围盒的体积
  */
 export function boundsVolume(bounds: BoundingBox): number {
-  const size = Vector3.subtract(bounds.max, bounds.min);
+  const size = new Vector3();
+  Vector3.subtract(bounds.max, bounds.min, size);
   return Math.max(0, size.x * size.y * size.z);
 }
 
@@ -23,7 +24,8 @@ export function boundsVolume(bounds: BoundingBox): number {
  * 计算包围盒的表面积
  */
 export function boundsSurfaceArea(bounds: BoundingBox): number {
-  const size = Vector3.subtract(bounds.max, bounds.min);
+  const size = new Vector3();
+  Vector3.subtract(bounds.max, bounds.min, size);
   return 2 * (size.x * size.y + size.y * size.z + size.z * size.x);
 }
 
@@ -46,7 +48,8 @@ export function boundsIntersects(a: BoundingBox, b: BoundingBox): boolean {
  * @returns 0: X, 1: Y, 2: Z
  */
 export function getLongestAxis(bounds: BoundingBox): number {
-  const size = Vector3.subtract(bounds.max, bounds.min);
+  const size = new Vector3();
+  Vector3.subtract(bounds.max, bounds.min, size);
   if (size.x > size.y && size.x > size.z) return 0;
   if (size.y > size.z) return 1;
   return 2;
@@ -67,7 +70,8 @@ export function toBoundingSphere(bounds: BoundingBox): BoundingSphere {
   Vector3.add(bounds.min, bounds.max, center);
   center.scale(0.5);
 
-  const halfSize = Vector3.subtract(bounds.max, bounds.min);
+  const halfSize = new Vector3();
+  Vector3.subtract(bounds.max, bounds.min, halfSize);
   const radius = halfSize.length() / 2;
 
   return new BoundingSphere(center, radius);

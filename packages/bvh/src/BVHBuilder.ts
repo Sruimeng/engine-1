@@ -25,6 +25,15 @@ export class BVHBuilder {
     }
 
     const tree = new BVHTree();
+
+    // 特殊情况：只有少量对象，直接逐个插入
+    if (objects.length <= tree.maxLeafSize) {
+      for (const obj of objects) {
+        tree.insert(obj.bounds, obj.userData);
+      }
+      return tree;
+    }
+
     const processed = new Set<number>();
 
     // 根据策略选择构建方法
@@ -54,16 +63,13 @@ export class BVHBuilder {
     // 如果对象数量少，直接逐个插入
     if (objects.length <= tree.maxLeafSize) {
       for (const obj of objects) {
-        // 直接插入叶子节点
-        if (obj.bounds) {
-          const { BVHTree: BVHTreeClass } = require('./BVHTree');
-        }
+        tree.insert(obj.bounds, obj.userData);
       }
       return;
     }
 
     // 计算总的包围盒
-    let unionAABB: AABB = null;
+    let unionAABB: AABB | null = null;
     for (const obj of objects) {
       const aabb = AABB.fromBoundingBox(obj.bounds);
       if (unionAABB === null) {
@@ -124,8 +130,16 @@ export class BVHBuilder {
   private static buildMedian(tree: BVHTree, objects: BVHInsertObject[], processed: Set<number>): void {
     if (objects.length === 0) return;
 
+    // 少量对象直接插入
+    if (objects.length <= tree.maxLeafSize) {
+      for (const obj of objects) {
+        tree.insert(obj.bounds, obj.userData);
+      }
+      return;
+    }
+
     // 计算总包围盒
-    let unionAABB: AABB = null;
+    let unionAABB: AABB | null = null;
     for (const obj of objects) {
       const aabb = AABB.fromBoundingBox(obj.bounds);
       if (unionAABB === null) {
@@ -180,8 +194,16 @@ export class BVHBuilder {
   private static buildEqual(tree: BVHTree, objects: BVHInsertObject[], processed: Set<number>): void {
     if (objects.length === 0) return;
 
+    // 少量对象直接插入
+    if (objects.length <= tree.maxLeafSize) {
+      for (const obj of objects) {
+        tree.insert(obj.bounds, obj.userData);
+      }
+      return;
+    }
+
     // 计算总包围盒
-    let unionAABB: AABB = null;
+    let unionAABB: AABB | null = null;
     for (const obj of objects) {
       const aabb = AABB.fromBoundingBox(obj.bounds);
       if (unionAABB === null) {
@@ -194,7 +216,15 @@ export class BVHBuilder {
     // 选择最长轴
     const splitAxis = this.selectSplitAxis(unionAABB);
 
-    // 计算中点
+    // 计算中点 - 添加空检查
+    if (!unionAABB) {
+      // 没有有效包围盒，直接插入所有对象
+      for (const obj of objects) {
+        tree.insert(obj.bounds, obj.userData);
+      }
+      return;
+    }
+
     const center = unionAABB.getCenter();
     const splitPos = center[splitAxis === 0 ? 'x' : splitAxis === 1 ? 'y' : 'z'];
 
@@ -231,10 +261,15 @@ export class BVHBuilder {
   /**
    * 选择最佳分割轴
    */
-  private static selectSplitAxis(unionAABB: AABB): number {
-    const size = Vector3.subtract(unionAABB.max, unionAABB.min);
-    if (size.x > size.y && size.x > size.z) return 0; // X
-    if (size.y > size.z) return 1; // Y
+  private static selectSplitAxis(unionAABB: AABB | null): number {
+    if (!unionAABB) return 0; // 默认返回 X 轴
+
+    const sizeX = unionAABB.max.x - unionAABB.min.x;
+    const sizeY = unionAABB.max.y - unionAABB.min.y;
+    const sizeZ = unionAABB.max.z - unionAABB.min.z;
+
+    if (sizeX > sizeY && sizeX > sizeZ) return 0; // X
+    if (sizeY > sizeZ) return 1; // Y
     return 2; // Z
   }
 

@@ -1,6 +1,7 @@
 import { BoundingBox, Vector3 } from '@galacean/engine-math';
 import { BoundingVolume } from './BoundingVolume';
 import { Ray } from './Ray';
+import { BoundingSphere } from './BoundingSphere';
 
 /**
  * 轴对齐包围盒 (Axis-Aligned Bounding Box)
@@ -158,7 +159,8 @@ export class AABB extends BoundingVolume {
    * 计算体积
    */
   volume(): number {
-    const size = Vector3.subtract(this.max, this.min);
+    const size = new Vector3();
+    Vector3.subtract(this.max, this.min, size);
     return Math.max(0, size.x * size.y * size.z);
   }
 
@@ -166,7 +168,8 @@ export class AABB extends BoundingVolume {
    * 计算表面积
    */
   surfaceArea(): number {
-    const size = Vector3.subtract(this.max, this.min);
+    const size = new Vector3();
+    Vector3.subtract(this.max, this.min, size);
     return 2 * (size.x * size.y + size.y * size.z + size.z * size.x);
   }
 
@@ -182,9 +185,10 @@ export class AABB extends BoundingVolume {
    */
   static fromCenterSize(center: Vector3, size: Vector3): AABB {
     const half = new Vector3(size.x * 0.5, size.y * 0.5, size.z * 0.5);
-    return new AABB(
-      Vector3.subtract(center, half),
-      Vector3.add(center, half)
-    );
+    const min = new Vector3();
+    const max = new Vector3();
+    Vector3.subtract(center, half, min);
+    Vector3.add(center, half, max);
+    return new AABB(min, max);
   }
 }

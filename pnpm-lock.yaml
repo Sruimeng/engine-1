@@ -161,6 +161,9 @@ importers:
       '@galacean/engine':
         specifier: workspace:*
         version: link:../packages/galacean
+      '@galacean/engine-bvh':
+        specifier: workspace:*
+        version: link:../packages/bvh
       '@galacean/engine-core':
         specifier: workspace:*
         version: link:../packages/core

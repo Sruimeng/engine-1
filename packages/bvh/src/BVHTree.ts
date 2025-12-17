@@ -483,7 +483,8 @@ export class BVHTree {
       max.z = Math.max(max.z, bounds.max.z);
     }
 
-    const size = Vector3.subtract(max, min);
+    const size = new Vector3();
+    Vector3.subtract(max, min, size);
     if (size.x > size.y && size.x > size.z) return 0; // X
     if (size.y > size.z) return 1; // Y
     return 2; // Z
@@ -620,7 +621,8 @@ export class BVHTree {
     Vector3.add(bounds.min, bounds.max, center);
     center.scale(0.5);
 
-    const diff = Vector3.subtract(point, center);
+    const diff = new Vector3();
+    Vector3.subtract(point, center, diff);
     const absX = Math.abs(diff.x);
     const absY = Math.abs(diff.y);
     const absZ = Math.abs(diff.z);

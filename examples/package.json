@@ -22,7 +22,8 @@
     "@galacean/engine-shader": "workspace:*",
     "@galacean/engine-shaderlab": "workspace:*",
     "@galacean/engine-toolkit": "latest",
-    "@galacean/engine-ui": "workspace:*"
+    "@galacean/engine-ui": "workspace:*",
+    "@galacean/engine-bvh": "workspace:*"
   },
   "devDependencies": {
     "dat.gui": "^0.7.9",

@@ -5,7 +5,8 @@ title: "BVH 加速结构包"
 description: "@galacean/engine-bvh - 提供高效的 BVH 空间加速结构，用于碰撞检测、光线投射和空间查询"
 tags: ["bvh", "spatial-acceleration", "collision-detection", "raycasting", "performance"]
 context_dependency: ["coding-conventions", "architecture-rendering-pipeline"]
-related_ids: ["packages-engine-bvh", "architecture-physics-integration"]
+related_ids: ["architecture-physics-integration"]
+last_updated: "2025-12-17"
 ---
 
 ## 概述
@@ -233,22 +234,28 @@ class CollisionResult {
 
 ### Ray 类
 
-射线类，用于光线投射查询。
+射线类，用于光线投射查询。构造时会自动归一化方向向量。
 
 ```typescript
 class Ray {
   origin: Vector3;                   // 射线起点
-  direction: Vector3;                // 射线方向（必须归一化）
+  direction: Vector3;                // 射线方向（自动归一化）
 
   constructor(origin?: Vector3, direction?: Vector3);
 
-  // 方法
-  getPoint(distance: number): Vector3;
-  intersectBox(box: BoundingBox): number;
-  intersectSphere(sphere: BoundingSphere): number;
-  intersectPlane(plane: Plane): number;
+  // 核心方法
+  getPoint(distance: number): Vector3;              // 获取指定距离的点
+  intersectBox(box: BoundingBox): number | null;    // 与 AABB 相交测试
+  intersectSphere(sphere: BoundingSphere): number | null;  // 与包围球相交测试
+  intersectPlane(plane: Plane): number | null;      // 与平面相交测试
+
+  // 静态工厂方法
+  static fromPoints(start: Vector3, end: Vector3): Ray;           // 从两点创建
+  static fromOriginDirection(origin: Vector3, direction: Vector3): Ray;  // 从起点和方向创建
 }
 ```
+
+**注意**: 构造函数会自动归一化方向向量，无需手动处理。
 
 ### BVHBuilder 类
 
@@ -256,16 +263,66 @@ BVH构建器，提供多种构建策略。
 
 ```typescript
 class BVHBuilder {
-  // 构建方法
-  static build(objects: Array<{bounds: BoundingBox, userData: any}>,
-               strategy?: BVHBuildStrategy): BVHTree;
+  /**
+   * 使用指定策略构建 BVH 树
+   * @param objects - 要插入的对象数组
+   * @param strategy - 构建策略 (默认: SAH)
+   * @returns 构建好的 BVHTree
+   */
+  static build(objects: BVHInsertObject[], strategy?: BVHBuildStrategy): BVHTree;
+}
 
-  // 构建策略枚举
-  static readonly BVHBuildStrategy = {
-    SAH: 0,                          // 表面积启发式（推荐）
-    Median: 1,                       // 中位数分割
-    Equal: 2                         // 均等分割
-  };
+// 对象类型定义
+interface BVHInsertObject {
+  bounds: BoundingBox;
+  userData?: any;
+}
+
+// 构建策略枚举 (定义在 enums.ts)
+enum BVHBuildStrategy {
+  SAH = 0,      // 表面积启发式（查询最优，构建较慢）
+  Median = 1,   // 中位数分割（均衡，推荐动态场景）
+  Equal = 2     // 均等分割（适合均匀分布）
+}
+```
+
+### 工具函数
+
+`utils.ts` 提供了一组便捷的包围盒操作函数：
+
+```typescript
+// 计算两个包围盒的联合包围盒
+function unionBounds(a: BoundingBox, b: BoundingBox): BoundingBox;
+
+// 计算包围盒的体积
+function boundsVolume(bounds: BoundingBox): number;
+
+// 计算包围盒的表面积
+function boundsSurfaceArea(bounds: BoundingBox): number;
+
+// 检查两个包围盒是否相交
+function boundsIntersects(a: BoundingBox, b: BoundingBox): boolean;
+
+// 获取包围盒的最长轴 (返回 0: X, 1: Y, 2: Z)
+function getLongestAxis(bounds: BoundingBox): number;
+
+// 将 BoundingBox 转换为 AABB
+function toAABB(bounds: BoundingBox): AABB;
+
+// 将 BoundingBox 转换为 BoundingSphere
+function toBoundingSphere(bounds: BoundingBox): BoundingSphere;
+```
+
+### PerformanceTimer 类
+
+性能计时辅助类，用于测量 BVH 操作耗时：
+
+```typescript
+class PerformanceTimer {
+  start(): void;           // 开始计时
+  stop(): number;          // 停止计时，返回本次耗时 (ms)
+  reset(): void;           // 重置计时器
+  getTotal(): number;      // 获取累计耗时 (ms)
 }
 ```
 
@@ -293,10 +350,16 @@ console.log(`插入了 ${bvh.count} 个对象`);
 ### 光线投射
 
 ```typescript
-// 创建射线
+// 创建射线 - 方向会自动归一化
 const ray = new Ray(
   new Vector3(-5, 0, 0),    // 起点
-  new Vector3(1, 0, 0)      // 方向（已归一化）
+  new Vector3(1, 0, 0)      // 方向
+);
+
+// 也可以使用静态工厂方法
+const ray2 = Ray.fromPoints(
+  new Vector3(0, 0, 0),     // 起点
+  new Vector3(10, 5, 3)     // 终点
 );
 
 // 执行光线投射
@@ -610,12 +673,11 @@ class SceneOptimizer {
 
 1. **忘记归一化射线方向**
    ```typescript
-   // 错误
+   // ✅ 正确 - Ray 构造函数会自动归一化
    const ray = new Ray(origin, direction);
 
-   // 正确
-   const normalizedDir = Vector3.normalize(direction);
-   const ray = new Ray(origin, normalizedDir);
+   // ✅ 正确 - 使用工厂方法
+   const ray = Ray.fromPoints(start, end);
    ```
 
 2. **过度更新动态对象**
@@ -701,7 +763,6 @@ class SceneOptimizer {
 ## ⚠️ 禁止事项
 
 ### 关键约束
-- 🚫 **忘记归一化射线方向**：射线的构造函数会自动归一化方向，但直接创建可能会导致问题
 - 🚫 **不合理的 maxLeafSize 设置**：过大会降低查询性能，过小会导致树过深
 - 🚫 **频繁单点更新**：应使用批量插入或 refit 策略
 - 🚫 **忽略树深度限制**：无限增长会导致栈溢出和性能下降

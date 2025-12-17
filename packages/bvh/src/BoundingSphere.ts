@@ -74,7 +74,8 @@ export class BoundingSphere extends BoundingVolume {
    */
   intersectRayDistance(ray: Ray): number | null {
     // 使用几何方法求解二次方程
-    const m = Vector3.subtract(ray.origin, this.center);
+    const m = new Vector3();
+    Vector3.subtract(ray.origin, this.center, m);
     const b = Vector3.dot(m, ray.direction);
     const c = Vector3.dot(m, m) - this.radius * this.radius;
 
@@ -135,12 +136,15 @@ export class BoundingSphere extends BoundingVolume {
     const distance = Vector3.distance(this.center, other.center);
     const newRadius = (distance + this.radius + other.radius) / 2;
 
-    const centerDir = Vector3.subtract(other.center, this.center);
+    const centerDir = new Vector3();
+    Vector3.subtract(other.center, this.center, centerDir);
     centerDir.normalize();
-    const newCenter = Vector3.add(
-      this.center,
-      Vector3.scale(centerDir, newRadius - distance * 0.5)
-    );
+
+    const scaledDir = new Vector3();
+    Vector3.scale(centerDir, newRadius - distance * 0.5, scaledDir);
+
+    const newCenter = new Vector3();
+    Vector3.add(this.center, scaledDir, newCenter);
 
     return new BoundingSphere(newCenter, newRadius);
   }

@@ -31,7 +31,11 @@ export class Ray {
    * 获取指定距离的点
    */
   getPoint(distance: number): Vector3 {
-    return Vector3.add(this.origin, Vector3.scale(this.direction, distance));
+    const scaled = new Vector3();
+    Vector3.scale(this.direction, distance, scaled);
+    const result = new Vector3();
+    Vector3.add(this.origin, scaled, result);
+    return result;
   }
 
   /**
@@ -78,7 +82,8 @@ export class Ray {
    * @returns 相交距离，如果不相交返回 null
    */
   intersectSphere(sphere: BoundingSphere): number | null {
-    const m = Vector3.subtract(this.origin, sphere.center);
+    const m = new Vector3();
+    Vector3.subtract(this.origin, sphere.center, m);
     const b = Vector3.dot(m, this.direction);
     const c = Vector3.dot(m, m) - sphere.radius * sphere.radius;
 
@@ -115,7 +120,8 @@ export class Ray {
    * 创建从两点定义的射线
    */
   static fromPoints(start: Vector3, end: Vector3): Ray {
-    const direction = Vector3.subtract(end, start);
+    const direction = new Vector3();
+    Vector3.subtract(end, start, direction);
     direction.normalize();
     return new Ray(start.clone(), direction);
   }
